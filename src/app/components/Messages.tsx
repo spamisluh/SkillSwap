@@ -1,9 +1,38 @@
 import { useState } from "react";
 import { Search, Send, Paperclip, MoreVertical, Star } from "lucide-react";
+import { useUser } from "../UserContext";
+import { useNavigate } from "react-router-dom";
 
 export function Messages() {
+  const { user } = useUser();
+  const navigate = useNavigate();
   const [selectedChat, setSelectedChat] = useState(0);
   const [message, setMessage] = useState("");
+
+  if (!user) {
+    return (
+      <div className="h-[calc(100vh-12rem)] flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-3xl font-semibold text-[#2d2d2d] mb-4">Login Required</h2>
+          <p className="text-[#6b6b6b] mb-6">You need to login or create an account to view messages.</p>
+          <div className="flex gap-4 justify-center">
+            <button
+              onClick={() => navigate("/login")}
+              className="px-6 py-2 rounded bg-[#ffb3c6] text-white font-semibold hover:bg-[#ff6b9d]"
+            >
+              Login
+            </button>
+            <button
+              onClick={() => navigate("/register")}
+              className="px-6 py-2 rounded border border-[#ffb3c6] text-[#ffb3c6] font-semibold hover:bg-[#ffb3c6] hover:text-white"
+            >
+              Register
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const conversations = [
     {

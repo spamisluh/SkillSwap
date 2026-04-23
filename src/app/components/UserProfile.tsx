@@ -1,34 +1,56 @@
 import { Link, useParams } from "react-router-dom";
 import { Star, MapPin, Calendar, Shield, ExternalLink, MessageSquare } from "lucide-react";
+import { useUser } from "../UserContext";
 
 export function UserProfile() {
   const { userId } = useParams();
+  const { user } = useUser();
 
-  const user = {
-    name: "Alex Chen",
-    avatar: "AC",
-    role: "Mathematics Major",
-    university: "University of the Philippines",
-    location: "Manila, Philippines",
-    joinDate: "September 2024",
-    verified: true,
-    rating: 4.9,
-    totalReviews: 24,
-    completedServices: 32,
-    bio: "Passionate about mathematics and helping fellow students succeed in their STEM courses. I believe in breaking down complex problems into simple steps. Whether you're struggling with derivatives or probability, I'm here to help you ace your exams!",
-    skills: [
-      { name: "Calculus", level: "Expert" },
-      { name: "Statistics", level: "Expert" },
-      { name: "Linear Algebra", level: "Advanced" },
-      { name: "Probability", level: "Advanced" },
-      { name: "Differential Equations", level: "Intermediate" },
-    ],
-    portfolio: [
-      { title: "Calculus Study Materials", tech: "Comprehensive Notes", image: "📊" },
-      { title: "Statistics Problem Sets", tech: "Practice Exams", image: "📈" },
-      { title: "Math Video Tutorials", tech: "Step-by-Step", image: "🎓" },
-    ],
-  };
+  // If viewing own profile, show info from context
+  let profile;
+  if (userId === "me" && user) {
+    profile = {
+      name: user.email.split("@")[0],
+      avatar: user.email[0]?.toUpperCase() ?? "U",
+      role: "Student",
+      university: "",
+      location: "",
+      joinDate: "",
+      verified: false,
+      rating: 0,
+      totalReviews: 0,
+      completedServices: 0,
+      bio: "",
+      skills: [],
+      portfolio: [],
+    };
+  } else {
+    profile = {
+      name: "Alex Chen",
+      avatar: "AC",
+      role: "Mathematics Major",
+      university: "Batangas State University",
+      location: "Manila, Philippines",
+      joinDate: "September 2024",
+      verified: true,
+      rating: 4.9,
+      totalReviews: 24,
+      completedServices: 32,
+      bio: "Passionate about mathematics and helping fellow students succeed in their STEM courses. I believe in breaking down complex problems into simple steps. Whether you're struggling with derivatives or probability, I'm here to help you ace your exams!",
+      skills: [
+        { name: "Calculus", level: "Expert" },
+        { name: "Statistics", level: "Expert" },
+        { name: "Linear Algebra", level: "Advanced" },
+        { name: "Probability", level: "Advanced" },
+        { name: "Differential Equations", level: "Intermediate" },
+      ],
+      portfolio: [
+        { title: "Calculus Study Materials", tech: "Comprehensive Notes", image: "📊" },
+        { title: "Statistics Problem Sets", tech: "Practice Exams", image: "📈" },
+        { title: "Math Video Tutorials", tech: "Step-by-Step", image: "🎓" },
+      ],
+    };
+  }
 
   const services = [
     {
@@ -137,7 +159,7 @@ export function UserProfile() {
         <div className="bg-white rounded-2xl border border-[#ffd4e5] p-8 mb-6">
           <h2 className="text-xl font-semibold text-[#2d2d2d] mb-6">Portfolio</h2>
           <div className="grid grid-cols-3 gap-4">
-            {user.portfolio.map((project, index) => (
+            {(profile.portfolio as {title: string; tech: string; image: string}[]).map((project, index: number) => (
               <div
                 key={index}
                 className="group p-6 rounded-xl bg-gradient-to-br from-[#fef9fc] to-[#ffe5f0] border border-[#ffd4e5] hover:shadow-lg transition-all cursor-pointer"
@@ -154,7 +176,7 @@ export function UserProfile() {
 
         <div className="bg-white rounded-2xl border border-[#ffd4e5] p-8">
           <h2 className="text-xl font-semibold text-[#2d2d2d] mb-6">
-            Reviews ({user.totalReviews})
+            Reviews ({profile.totalReviews})
           </h2>
           <div className="space-y-6">
             {reviews.map((review, index) => (
@@ -184,7 +206,7 @@ export function UserProfile() {
         <div className="bg-white rounded-2xl border border-[#ffd4e5] p-6 mb-6">
           <h2 className="text-lg font-semibold text-[#2d2d2d] mb-4">Skills</h2>
           <div className="space-y-3">
-            {user.skills.map((skill, index) => (
+            {(profile.skills as {name: string; level: string}[]).map((skill, index: number) => (
               <div key={index}>
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-sm text-[#2d2d2d]">{skill.name}</span>

@@ -1,9 +1,13 @@
-import { Outlet, Link, useLocation } from "react-router-dom";
+import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import { Bell, MessageSquare, User, Search } from "lucide-react";
+import { useUser } from "../UserContext";
+
 
 export function Root() {
   const location = useLocation();
   const isLanding = location.pathname === "/";
+  const { user, logout } = useUser();
+  const navigate = useNavigate();
 
   if (isLanding) {
     return <Outlet />;
@@ -35,26 +39,72 @@ export function Root() {
               >
                 Dashboard
               </Link>
-              <Link
-                to="/messages"
-                className="relative text-[#6b6b6b] hover:text-[#ffb3c6] transition-colors"
-              >
-                <MessageSquare className="w-5 h-5" />
-                <span className="absolute -top-1 -right-1 w-2 h-2 bg-[#ff6b9d] rounded-full"></span>
-              </Link>
-              <button
-                onClick={() => alert('You have 2 new notifications')}
-                className="relative text-[#6b6b6b] hover:text-[#ffb3c6] transition-colors"
-              >
-                <Bell className="w-5 h-5" />
-                <span className="absolute -top-1 -right-1 w-2 h-2 bg-[#ff6b9d] rounded-full"></span>
-              </button>
-              <Link
-                to="/profile/me"
-                className="w-9 h-9 rounded-full bg-gradient-to-br from-[#ffb3c6] to-[#c9a0dc] flex items-center justify-center"
-              >
-                <User className="w-5 h-5 text-white" />
-              </Link>
+              {user ? (
+                <>
+                  <Link
+                    to="/messages"
+                    className="relative text-[#6b6b6b] hover:text-[#ffb3c6] transition-colors"
+                  >
+                    <MessageSquare className="w-5 h-5" />
+                    <span className="absolute -top-1 -right-1 w-2 h-2 bg-[#ff6b9d] rounded-full"></span>
+                  </Link>
+                  <button
+                    onClick={() => alert('You have 2 new notifications')}
+                    className="relative text-[#6b6b6b] hover:text-[#ffb3c6] transition-colors"
+                  >
+                    <Bell className="w-5 h-5" />
+                    <span className="absolute -top-1 -right-1 w-2 h-2 bg-[#ff6b9d] rounded-full"></span>
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => navigate("/login")}
+                    className="relative text-[#6b6b6b] hover:text-[#ffb3c6] transition-colors opacity-50 cursor-not-allowed"
+                    title="Login required"
+                  >
+                    <MessageSquare className="w-5 h-5" />
+                  </button>
+                  <button
+                    onClick={() => navigate("/login")}
+                    className="relative text-[#6b6b6b] hover:text-[#ffb3c6] transition-colors opacity-50 cursor-not-allowed"
+                    title="Login required"
+                  >
+                    <Bell className="w-5 h-5" />
+                  </button>
+                </>
+              )}
+              {user ? (
+                <>
+                  <Link
+                    to="/profile/me"
+                    className="w-9 h-9 rounded-full bg-gradient-to-br from-[#ffb3c6] to-[#c9a0dc] flex items-center justify-center"
+                  >
+                    <User className="w-5 h-5 text-white" />
+                  </Link>
+                  <button
+                    onClick={() => { logout(); navigate("/login"); }}
+                    className="ml-2 px-3 py-1 rounded bg-[#ffb3c6] text-white font-semibold hover:bg-[#ff6b9d]"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/login"
+                    className="px-3 py-1 rounded bg-[#ffb3c6] text-white font-semibold hover:bg-[#ff6b9d]"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="px-3 py-1 rounded border border-[#ffb3c6] text-[#ffb3c6] font-semibold hover:bg-[#ffb3c6] hover:text-white"
+                  >
+                    Register
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>

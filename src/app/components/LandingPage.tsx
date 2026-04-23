@@ -1,7 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ArrowRight, BookOpen, Palette, PenTool, Star, Users, Shield, Sparkles } from "lucide-react";
+import { useUser } from "../UserContext";
 
 export function LandingPage() {
+  const { user } = useUser();
+  const navigate = useNavigate();
   const categories = [
     { name: "Tutoring", icon: BookOpen, color: "from-[#ffb3c6] to-[#ffd4e5]", link: "/browse" },
     { name: "Design", icon: Palette, color: "from-[#c9a0dc] to-[#e5d4f0]", link: "/browse" },
@@ -48,12 +51,12 @@ export function LandingPage() {
               >
                 Browse Services
               </Link>
-              <Link
-                to="/dashboard"
+              <button
+                onClick={() => user ? navigate("/dashboard") : navigate("/login")}
                 className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#ffb3c6] to-[#ffd4e5] text-[#2d2d2d] hover:shadow-lg transition-all"
               >
                 Get Started
-              </Link>
+              </button>
             </div>
           </div>
         </div>
@@ -85,12 +88,12 @@ export function LandingPage() {
               Find a Service
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
-            <Link
-              to="/dashboard"
+            <button
+              onClick={() => user ? navigate("/dashboard") : navigate("/login")}
               className="px-8 py-4 rounded-full bg-white border-2 border-[#ffd4e5] text-[#2d2d2d] hover:bg-[#fef9fc] transition-all"
             >
               Offer a Skill
-            </Link>
+            </button>
           </div>
         </div>
 

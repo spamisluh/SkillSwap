@@ -6,6 +6,8 @@ import { BrowseServices } from "./components/BrowseServices";
 import { ServiceDetail } from "./components/ServiceDetail";
 import { UserProfile } from "./components/UserProfile";
 import { Messages } from "./components/Messages";
+import { Login } from "./components/Login";
+import { Register } from "./components/Register";
 
 export const router = createBrowserRouter([
   {
@@ -18,6 +20,8 @@ export const router = createBrowserRouter([
       { path: "service/:id", Component: ServiceDetail },
       { path: "profile/:userId", Component: UserProfile },
       { path: "messages", Component: Messages },
+      { path: "login", Component: Login },
+      { path: "register", Component: Register },
     ],
   },
 ]);
